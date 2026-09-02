@@ -1,0 +1,35 @@
+import Link from "next/link";
+
+function Arrow() {
+  return <span aria-hidden="true">↗</span>;
+}
+
+export default function NotFound() {
+  return (
+    <main className="not-found-page">
+      <header className="not-found-header">
+        <Link className="brand" href="/#top" aria-label="flexmobi.rj — página inicial">
+          <span className="brand-mark">f</span>
+          <span className="brand-name">flexmobi</span>
+          <span className="brand-suffix">.rj</span>
+        </Link>
+        <span>Erro 404 / rota fora do mapa</span>
+      </header>
+
+      <section className="not-found-content">
+        <span className="not-found-code" aria-hidden="true">404</span>
+        <div>
+          <p className="eyebrow"><span /> Caminho não encontrado</p>
+          <h1>Essa rua<br /><i>não leva</i><br />até aqui.</h1>
+          <p className="not-found-copy">A página mudou de endereço ou nunca passou por este caminho. Sua próxima bike continua logo ali.</p>
+          <div className="not-found-actions">
+            <Link className="button button--amber" href="/">Voltar ao início <Arrow /></Link>
+            <Link className="quiet-link" href="/#catalogo">Explorar modelos <Arrow /></Link>
+          </div>
+        </div>
+      </section>
+
+      <p className="not-found-locations">Icaraí / Niterói — Ipanema / Rio de Janeiro</p>
+    </main>
+  );
+}

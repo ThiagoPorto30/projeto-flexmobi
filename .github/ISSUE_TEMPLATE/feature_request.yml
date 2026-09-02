@@ -1,0 +1,21 @@
+name: Sugerir funcionalidade
+description: Proponha uma melhoria de produto.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema ou oportunidade
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposta
+    validations:
+      required: true
+  - type: textarea
+    id: success
+    attributes:
+      label: Como saberemos que deu certo?
