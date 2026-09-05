@@ -19,3 +19,9 @@ coverage/
 Thumbs.db
 .vscode/
 .idea/
+# Local assistant configuration and Playwright CLI state
+.agents/
+.claude/
+.playwright/
+# Playwright CLI output (may contain credentials)
+.playwright-cli/

@@ -1,0 +1,23 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flexmobi — Estudo 3D V20</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#ded9cd;color:#20221f;font:14px system-ui}header{position:absolute;top:28px;left:5%;z-index:1}h1{font-size:24px;margin:8px 0}small{letter-spacing:.15em}#scene{width:100%;height:100svh;display:block;touch-action:none}footer{position:absolute;bottom:25px;left:5%;right:5%;display:flex;gap:15px;align-items:center;flex-wrap:wrap}button,a{padding:12px 18px;border:1px solid #777;background:#eee9df;color:inherit;text-decoration:none;cursor:pointer}#status{max-width:520px}button:focus-visible,a:focus-visible{outline:3px solid #856421}</style>
+<header><small>FLEXMOBI.RJ / ESTUDO 01</small><h1>V20 Brake Pro</h1><span>Reconstrução aproximada a partir de fotos.</span></header>
+<canvas id="scene" aria-label="Modelo 3D da bike. Arraste para girar; use os botões para mudar a vista." tabindex="0"></canvas>
+<footer><span id="status" role="status">Carregando modelo…</span><button id="reset">Vista inicial</button><button id="side">Vista lateral</button><a href="./v20-brake-pro-estudo.glb" download>Baixar GLB</a></footer>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+<script type="module">
+import * as T from 'three';import {OrbitControls} from './vendor/OrbitControls.js';import {GLTFLoader} from './vendor/GLTFLoader.js';
+const canvas=document.querySelector('canvas'),status=document.querySelector('#status');
+try {
+ const renderer=new T.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+ const scene=new T.Scene();scene.background=new T.Color('#ded9cd');const camera=new T.PerspectiveCamera(36,1,.01,30);camera.position.set(-1.6,1.25,2.8);
+ const controls=new OrbitControls(camera,canvas);controls.target.set(0,.57,0);controls.minDistance=1.6;controls.maxDistance=5;controls.maxPolarAngle=Math.PI*.49;controls.enablePan=false;controls.update();
+ scene.add(new T.HemisphereLight(0xf8f4e9,0x6a6963,3));
+ for(const [p,power] of [[[ -2,4,3],5],[[2,2,-3],4]]) {const light=new T.DirectionalLight(0xffffff,power);light.position.set(...p);light.castShadow=true;light.shadow.mapSize.set(2048,2048);light.shadow.camera.left=-2;light.shadow.camera.right=2;light.shadow.camera.top=2;light.shadow.camera.bottom=-2;light.shadow.bias=-.0002;scene.add(light);}
+ const ground=new T.Mesh(new T.PlaneGeometry(200,200),new T.ShadowMaterial({opacity:.15}));ground.rotation.x=-Math.PI/2;ground.position.y=-.008;ground.receiveShadow=true;scene.add(ground);
+ function render(){renderer.render(scene,camera);}controls.addEventListener('change',render);
+ function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();render();}addEventListener('resize',resize);resize();
+ new GLTFLoader().load('./v20-brake-pro-estudo.glb',g=>{g.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});scene.add(g.scene);status.textContent='Arraste para girar · Pinça ou scroll para aproximar';render();window.bikeLoaded=true;},undefined,()=>{status.textContent='Não foi possível carregar o modelo. Recarregue a página.';});
+ document.querySelector('#reset').onclick=()=>{camera.position.set(-1.6,1.25,2.8);controls.update();};document.querySelector('#side').onclick=()=>{camera.position.set(0,.8,3.1);controls.update();};
+ canvas.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const offset=camera.position.clone().sub(controls.target);offset.applyAxisAngle(new T.Vector3(0,1,0),e.key==='ArrowLeft'?.15:-.15);camera.position.copy(controls.target).add(offset);controls.update();});
+}catch(e){status.textContent='Visualização 3D indisponível neste aparelho. O arquivo GLB continua disponível para download.';console.error(e);}
+</script></html>

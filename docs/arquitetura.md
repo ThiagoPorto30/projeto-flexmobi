@@ -1,11 +1,11 @@
 # Arquitetura inicial
 
-O projeto é uma aplicação web em Next.js com App Router e TypeScript. A interface e a lógica de apresentação vivem em `app/`; o catálogo usado no protótipo está em `app/data/catalog.ts`; e as imagens publicadas são servidas de `public/imagens/`.
+O projeto é uma aplicação web em Next.js com App Router e TypeScript. A interface e a lógica de apresentação vivem em `src/app/`; o catálogo usado no protótipo está em `src/app/data/catalog.ts`; e as imagens publicadas são servidas de `public/imagens/`.
 
 ## Estado atual
 
 - Renderização e interações são locais, sem banco de dados ou autenticação.
-- Dados em `dados/` são referências de origem e não constituem uma fonte comercial validada.
+- Dados em `materiais/dados-fonte/` são referências de origem e não constituem uma fonte comercial validada.
 - O formulário é demonstrativo e não envia informações a um serviço externo.
 
 ## Direção para produção

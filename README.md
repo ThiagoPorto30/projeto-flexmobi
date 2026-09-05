@@ -21,9 +21,10 @@ Antes de enviar uma alteração, execute `pnpm typecheck` e `pnpm build`.
 
 ## Estrutura
 
-- `app/`: aplicação Next.js e dados usados pela interface.
+- `src/app/`: aplicação Next.js e dados usados pela interface.
 - `public/imagens/`: imagens usadas pelo site.
-- `dados/`: fontes de catálogo e preços a validar.
+- `materiais/dados-fonte/`: fontes de catálogo e preços a validar.
+- `materiais/`: apresentações, imagens de origem e arquivos legados; não são carregados pelo site.
 - `docs/`: documentação de produto e decisões técnicas.
 - `.github/`: padrões de colaboração e automações do GitHub.
 

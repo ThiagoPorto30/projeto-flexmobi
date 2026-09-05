@@ -1,0 +1,90 @@
+.catalog {
+  display: grid;
+  gap: clamp(40px, 6vw, 84px);
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, .62fr);
+  align-items: flex-end;
+  gap: 8vw;
+}
+
+.intro h2 {
+  margin: 14px 0 0;
+  font: 600 clamp(52px, 6vw, 96px)/.83 var(--display);
+  letter-spacing: -.06em;
+  text-transform: uppercase;
+}
+
+.intro h2 i { color: var(--amber-dark); font-weight: inherit; }
+.intro > div:last-child { display: grid; gap: 22px; }
+.intro > div:last-child p { margin: 0; color: #67675f; font-size: 14px; line-height: 1.65; }
+.intro :global(.button) { justify-self: start; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  background: var(--paper);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.cardHead { display: flex; justify-content: space-between; gap: 10px; min-height: 22px; color: #65655e; font: 9px var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+.available { color: var(--amber-dark); }
+.soon { color: #85857c; }
+.imageWrap { position: relative; aspect-ratio: 1; flex-shrink: 0; margin: 16px -6px 7px; background: #ded9ce; overflow: hidden; }
+.image { object-fit: contain; padding: 8px; mix-blend-mode: multiply; transition: transform var(--duration-medium) var(--ease-smooth-out); }
+.card:hover .image { transform: scale(1.045); }
+.badge { margin: 10px 0 0; color: var(--amber-dark); font: 9px var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+.card h3 { min-height: 1.8em; margin: 8px 0; font: 600 clamp(25px, 2.15vw, 39px)/.9 var(--display); letter-spacing: -.055em; text-transform: uppercase; }
+.detail { margin: 0; color: #6d6d64; font-size: 12px; line-height: 1.55; }
+.price { display: grid; gap: 3px; margin-top: auto; padding-top: 24px; }
+.price span { color: #77776f; font: 9px var(--mono); text-transform: uppercase; }
+.price strong { font: 600 22px var(--display); letter-spacing: -.03em; }
+.cardLink { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 14px; color: var(--text); border-top: 1px solid var(--line); font: 600 10px var(--mono); letter-spacing: .05em; text-transform: uppercase; }
+.cardLink span { transition: transform var(--duration-fast) var(--ease-smooth-out); }
+.cardLink:hover span { transform: translateX(3px); }
+
+.uses { display: grid; grid-template-columns: minmax(190px, .46fr) 1fr; gap: 7vw; padding-top: 5px; }
+.uses > div:first-child p:last-child { max-width: 280px; margin: 12px 0 0; color: #67675f; font-size: 13px; line-height: 1.6; }
+.useLinks { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+.useLinks a { display: grid; gap: 5px; padding: 14px 0; color: var(--text); border-bottom: 1px solid var(--line); }
+.useLinks a:nth-child(odd) { padding-right: 24px; border-right: 1px solid var(--line); }
+.useLinks a:nth-child(even) { padding-left: 24px; }
+.useLinks span { font: 500 15px var(--body); }
+.useLinks small { grid-column: 1; color: #77776f; font: 11px/1.45 var(--body); }
+.useLinks a:hover span { color: var(--amber-dark); text-decoration: underline; text-underline-offset: 4px; }
+
+@media (max-width: 980px) {
+  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .intro, .uses { grid-template-columns: 1fr; gap: 30px; }
+  .intro h2 { font-size: clamp(48px, 15vw, 72px); }
+  .grid { grid-template-columns: 1fr; }
+  .card { display: grid; grid-template-columns: 120px minmax(0, 1fr); column-gap: 14px; padding: 14px; }
+  .cardHead { grid-column: 1 / -1; min-height: 0; margin-bottom: 8px; }
+  .imageWrap { grid-column: 1; grid-row: 2 / span 3; align-self: center; width: 120px; height: 120px; margin: 0; }
+  .badge, .detail { display: none; }
+  .card h3 { grid-column: 2; grid-row: 2; align-self: end; min-height: 0; margin: 0 0 7px; font-size: 29px; }
+  .price { grid-column: 2; grid-row: 3; align-self: start; margin: 0; padding-top: 0; }
+  .cardLink { grid-column: 2; grid-row: 4; margin-top: 10px; padding-top: 10px; }
+  .useLinks { grid-template-columns: 1fr; }
+  .useLinks a:nth-child(odd), .useLinks a:nth-child(even) { padding: 14px 0; border-right: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image, .cardLink span { transition: none; }
+  .card:hover .image, .cardLink:hover span { transform: none; }
+}
