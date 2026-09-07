@@ -1,0 +1,123 @@
+{
+  "revision": 6,
+  "parts": 2217,
+  "triangles": 300188,
+  "drawCalls": 74,
+  "assemblies": [
+    "01 · Roda dianteira",
+    "02 · Roda traseira",
+    "03 · Quadro e articulações",
+    "04 · Bancos e bagageiro",
+    "05 · Suspensão e paralamas",
+    "06 · Bateria",
+    "07 · Guidão e comandos",
+    "08 · Farol",
+    "09 · Transmissão e pedais"
+  ],
+  "dimensions": {
+    "units": "metres",
+    "sourceCheckedOn": "2026-09-05",
+    "scaleMethod": "Uniform rim-anchored reconstruction. No non-uniform fit to another variant.",
+    "authoringToMetres": 0.9485981308411215,
+    "nominal": {
+      "tireSize": {
+        "value": "20 × 4",
+        "source": "inow",
+        "status": "documented-model-specification"
+      },
+      "beadSeatDiameter": {
+        "value": 0.406,
+        "source": "kenda",
+        "status": "documented-component-nominal",
+        "fitment": "conditional"
+      },
+      "tireSectionWidth": {
+        "value": 0.098,
+        "source": "kenda",
+        "status": "documented-component-nominal",
+        "fitment": "conditional"
+      }
+    },
+    "comparisonOnly": {
+      "vehicle": {
+        "length": 1.64,
+        "width": 0.68,
+        "height": 1.15
+      },
+      "source": "manual",
+      "status": "different-or-unconfirmed-variant",
+      "applied": false,
+      "reason": "BK-V20 Pro 750 W manual; exact Brake Pro production version not established."
+    },
+    "estimated": [
+      "Inflated tire outside diameter, pressure, rim width and flange profile",
+      "Wheelbase, overall dimensions and saddle height",
+      "Battery enclosure, frame tubes, fork, brake rotors and hidden surfaces"
+    ],
+    "sources": {
+      "inow": {
+        "url": "https://inowbrasil.com.br/produto/inow-v20-brake-pro",
+        "title": "INOW V20 Brake Pro",
+        "evidence": "FAT 20 × 4 inches; no complete dimensional drawing found on this page.",
+        "scope": "Current Brake Pro; the photographed production version is not confirmed."
+      },
+      "kenda": {
+        "url": "https://bicycle.kendatire.com/en-us/find-a-tire/bicycle/fat-plus-tires/krusade-sport/",
+        "title": "Kenda Krusade Sport K1188",
+        "evidence": "Part 01204118801: 20 × 4.00, ETRTO 98-406.",
+        "scope": "Nominal component specification. Kenda/Krusade markings match the photos; exact fitment remains conditional."
+      },
+      "manual": {
+        "url": "https://drive.google.com/file/d/1yBA1T0UR3Ymb1rClpbrby5TpjSSxvSw7/view",
+        "distributorUrl": "https://www.neonmobilidade.com.br/pagina/blog-manual-do-usuario-bicicleta-eletrica-v20-pro-download-em-pdf.html",
+        "title": "V20 PRO - MANUAL DE INSTRUÇÕES - PT_BR X.pdf",
+        "page": 7,
+        "evidence": "BK-V20 Pro, 750 W. Vehicle: 164 × 68 × 115 cm. Packaging: 142.5 × 27 × 86.5 cm.",
+        "scope": "Manual distributed by a reseller, not retrieved from INOW. Exact model/year equivalence unverified."
+      },
+      "etrto": {
+        "url": "https://www.schwalbe.com/en/technology-faq/tire-sizes/",
+        "title": "Schwalbe — Tire sizes",
+        "evidence": "ETRTO identifies nominal section width and bead/inner diameter, not inflated outside diameter."
+      }
+    },
+    "reconstructed": {
+      "length": 1.7814326586970695,
+      "width": 0.6571887850467291,
+      "height": 1.2384775252265883,
+      "wheelbase": 1.1572897196261682,
+      "groundOffset": 0.0028457944172599896,
+      "status": "estimated-reconstruction-not-product-specification"
+    },
+    "measuredTyreBodies": [
+      {
+        "sectionWidth": 0.09800000168452754,
+        "diameterX": 0.5824392735958099,
+        "diameterY": 0.5824392735958099
+      },
+      {
+        "sectionWidth": 0.09800000168452754,
+        "diameterX": 0.5824392735958099,
+        "diameterY": 0.5824392735958099
+      }
+    ]
+  },
+  "bytes": 10365336,
+  "references": [
+    "026",
+    "014",
+    "016",
+    "041",
+    "042",
+    "048",
+    "049",
+    "056",
+    "060"
+  ],
+  "logo": "079_logo_inow-CqfG1FmB.webp",
+  "limitations": [
+    "Nominal tire/rim component dimensions; exact bike fitment conditional",
+    "Other dimensions estimated; BK-V20 Pro manual envelope not applied",
+    "Photo-guided modelling, not manufacturer CAD"
+  ]
+}

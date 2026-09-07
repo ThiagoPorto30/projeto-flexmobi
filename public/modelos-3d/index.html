@@ -1,23 +1,153 @@
-<!doctype html><html lang="pt-BR"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Flexmobi — Estudo 3D V20</title>
-<style>*{box-sizing:border-box}body{margin:0;background:#ded9cd;color:#20221f;font:14px system-ui}header{position:absolute;top:28px;left:5%;z-index:1}h1{font-size:24px;margin:8px 0}small{letter-spacing:.15em}#scene{width:100%;height:100svh;display:block;touch-action:none}footer{position:absolute;bottom:25px;left:5%;right:5%;display:flex;gap:15px;align-items:center;flex-wrap:wrap}button,a{padding:12px 18px;border:1px solid #777;background:#eee9df;color:inherit;text-decoration:none;cursor:pointer}#status{max-width:520px}button:focus-visible,a:focus-visible{outline:3px solid #856421}</style>
-<header><small>FLEXMOBI.RJ / ESTUDO 01</small><h1>V20 Brake Pro</h1><span>Reconstrução aproximada a partir de fotos.</span></header>
-<canvas id="scene" aria-label="Modelo 3D da bike. Arraste para girar; use os botões para mudar a vista." tabindex="0"></canvas>
-<footer><span id="status" role="status">Carregando modelo…</span><button id="reset">Vista inicial</button><button id="side">Vista lateral</button><a href="./v20-brake-pro-estudo.glb" download>Baixar GLB</a></footer>
+<!doctype html>
+<html lang="pt-BR">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Flexmobi — V20 em detalhe</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#dedbd2;color:#282b27;font:14px system-ui}
+header{position:absolute;top:32px;left:4%;z-index:1;pointer-events:none;background:#dedbd2d9;padding:10px 15px 12px 0;border-radius:4px}header small{font-size:10px;letter-spacing:.2em}h1{font-size:30px;letter-spacing:-.04em;margin:10px 0 7px}header p{font-size:12px;color:#66665e;margin:0}
+#stage{height:100svh}#model-panel{position:relative;width:100%;height:100%;min-width:0}#scene{width:100%;height:100%;display:block;touch-action:none;outline-offset:-4px}
+footer{position:absolute;bottom:24px;left:4%;right:4%;display:flex;justify-content:space-between;gap:15px;align-items:end;pointer-events:none}
+footer>div{background:#dedbd2ed;border-radius:4px;padding:8px 10px}
+nav{display:flex;gap:5px;flex-wrap:wrap;pointer-events:auto;max-width:680px}
+button,a{border:1px solid #a8a79d;background:#e9e6dde8;color:#2b2d29;padding:11px 15px;border-radius:3px;font:12px system-ui;text-decoration:none;cursor:pointer;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
+button[aria-pressed=true]{background:#292d29;color:#e9e6de;border-color:#292d29}button:hover,a:hover{border-color:#565e52}
+button:focus-visible,a:focus-visible,canvas:focus-visible{outline:3px solid #967531}
+#status{display:block;font-size:12px;max-width:260px;margin-bottom:7px}#detail{font-size:11px;color:#707267}
+#download{margin-left:6px}#help{position:absolute;right:4%;top:103px;font-size:11px;color:#66665e}
+#modes{position:absolute;top:34px;right:4%;z-index:2;display:flex;gap:6px}
+[hidden]{display:none!important}#reference-panel{margin:0}#reference-image{width:100%;height:100%;object-fit:contain;display:block}
+.panel-label{position:absolute;top:12px;left:14px;font:10px system-ui;letter-spacing:.12em;background:#f9f8f5e8;padding:7px 9px;border-radius:2px;pointer-events:none;z-index:1}
+#compare-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;pointer-events:auto;font-size:12px}
+select{font:inherit;border:1px solid #a8a79d;border-radius:3px;padding:10px;background:#f4f2ed;color:#282b27;min-height:44px;max-width:100%}select:focus-visible{outline:3px solid #967531}
+body.comparing #stage{height:clamp(360px,min(calc(100svh - 285px),38vw),620px);min-height:360px;margin:164px 4% 0;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+body.comparing #model-panel,body.comparing #reference-panel{position:relative;border:1px solid #c8c6bd;border-radius:5px;background:#faf9f6;overflow:hidden}
+body.comparing footer{position:relative;left:auto;right:auto;bottom:auto;margin:20px 4% 24px;align-items:center}
+body.comparing #status{max-width:330px}body.comparing #detail{display:block;max-width:390px;line-height:1.5}
+dialog{width:min(580px,calc(100% - 28px));max-height:85svh;border:1px solid #aaa89d;border-radius:8px;background:#f4f2eb;color:#282b27;padding:24px;box-shadow:0 20px 80px #0003}dialog::backdrop{background:#1c211b99;backdrop-filter:blur(4px)}dialog h2{font-size:24px;letter-spacing:-.03em;margin:0;outline:none}dialog h3{font-size:13px;margin:22px 0 8px}dialog p{font-size:13px;line-height:1.6;margin:8px 0}dialog dl{display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:13px}dialog dd{margin:0;font-variant-numeric:tabular-nums}dialog .sources{display:flex;gap:6px;flex-wrap:wrap;margin-top:18px}dialog form{margin:0}.dialog-heading{position:sticky;top:-24px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin:-24px -24px 16px;padding:20px 24px;background:#f4f2eb;border-bottom:1px solid #dad6ca}#measurement-state{color:#715c31;border-left:2px solid #a28c58;padding-left:12px}
+@media(max-width:640px){header{top:20px}h1{font-size:25px}header p{max-width:245px}#help{display:none}footer{bottom:14px;display:block}nav{margin-top:12px;gap:5px}button,a{padding:10px 11px;font-size:11px}#status{max-width:none}#download{margin-left:0}}
+@media(max-width:760px){#modes{top:137px;left:4%;right:auto}body:not(.comparing) #help{display:none}body.comparing #stage{margin-top:201px;grid-template-columns:1fr;height:auto;min-height:0;gap:12px}body.comparing #model-panel,body.comparing #reference-panel{height:360px}body.comparing footer{display:block}#compare-controls{margin-top:16px}}
+</style></head>
+<body>
+<header><small>FLEXMOBI.RJ &nbsp; / &nbsp; ESTUDO 06</small><h1>V20 Brake Pro</h1><p>Rodas com referência dimensional · estudo pelas fotos</p></header>
+<div id="modes" role="group" aria-label="Modo de visualização"><button id="explore-mode" aria-pressed="true">Explorar 3D</button><button id="compare-mode" aria-pressed="false">Foto × modelo</button><button id="measurements-open" aria-haspopup="dialog">Medidas</button></div>
+<span id="help">360° &nbsp; / &nbsp; Arraste para explorar</span>
+<main id="stage">
+<figure id="reference-panel" hidden><figcaption class="panel-label">FOTO ORIGINAL · <span id="reference-number">048</span></figcaption><img id="reference-image" src="../imagens/048_v20-brake-pro-detail-2.jpg" alt="Foto original da V20 Brake Pro, vista pelo lado da bateria."></figure>
+<section id="model-panel" aria-label="Modelo interativo"><span id="model-label" class="panel-label" hidden>RECONSTRUÇÃO 3D · ÂNGULO APROXIMADO</span>
+<canvas id="scene" aria-label="Bike 3D. Arraste para girar; use as setas para rotacionar e mais ou menos para zoom." tabindex="0"></canvas>
+</section></main>
+<footer><div><span id="status" role="status">Preparando a bike…</span><span id="detail">Selecione um conjunto para ver de perto.</span></div>
+<nav id="view-controls" aria-label="Vistas do modelo">
+<button data-view="all" aria-pressed="true">Vista geral</button><button data-view="side" aria-pressed="false">Lateral</button><button data-view="cockpit" aria-pressed="false">Guidão</button><button data-view="seat" aria-pressed="false">Bancos</button><button data-view="battery" aria-pressed="false">Bateria</button><button data-view="drive" aria-pressed="false">Transmissão</button><button data-view="front" aria-pressed="false">Farol</button>
+<a id="download" href="./v20-brake-pro-estudo.glb" download>Baixar GLB ↓</a></nav>
+<div id="compare-controls" hidden><label for="reference-select">Referência</label><select id="reference-select"><option value="battery">Lado da bateria</option><option value="drive">Lado da corrente</option><option value="front">Frente em 3/4</option></select><button id="realign">Realinhar modelo</button></div></footer>
+<dialog id="measurements" aria-labelledby="measurements-title">
+<div class="dialog-heading"><h2 id="measurements-title" tabindex="-1" autofocus>Medidas e fontes</h2><form method="dialog"><button>Fechar</button></form></div>
+<p id="measurement-state">Referências documentadas para os componentes. A réplica completa ainda não tem dimensões certificadas pela INOW.</p>
+<h3>Aplicado nas rodas</h3><dl><dt>Seção nominal do pneu</dt><dd>98 mm</dd><dt>Diâmetro de assentamento</dt><dd>406 mm</dd></dl>
+<p>Kenda Krusade Sport 20 × 4.00, ETRTO 98–406. As fotos mostram Kenda/Krusade; o código exato do pneu ainda precisa ser conferido na loja. O diâmetro externo do pneu e o perfil do aro são estimados.</p>
+<h3>Manual encontrado · não aplicado ao quadro</h3>
+<p>164 × 68 × 115 cm no manual da BK‑V20 Pro de 750 W, página 7, distribuído pela Neon Mobilidade. A equivalência com a Brake Pro fotografada não foi confirmada. Medidas de embalagem não foram usadas.</p>
+<h3>Dimensões deste arquivo 3D · estimadas</h3>
+<p id="reconstructed-size">Aguardando carregamento do modelo…</p>
+<p>Não usar essas dimensões como ficha técnica. Entre-eixos, banco, bateria, quadro e suspensão ainda dependem de medição do exemplar ou desenho do fabricante.</p>
+<div class="sources"><a href="https://bicycle.kendatire.com/en-us/find-a-tire/bicycle/fat-plus-tires/krusade-sport/" target="_blank" rel="noopener noreferrer">Kenda ↗</a><a href="https://inowbrasil.com.br/produto/inow-v20-brake-pro" target="_blank" rel="noopener noreferrer">INOW ↗</a><a href="https://drive.google.com/file/d/1yBA1T0UR3Ymb1rClpbrby5TpjSSxvSw7/view" target="_blank" rel="noopener noreferrer">Manual · pág. 7 ↗</a></div>
+</dialog>
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 <script type="module">
-import * as T from 'three';import {OrbitControls} from './vendor/OrbitControls.js';import {GLTFLoader} from './vendor/GLTFLoader.js';
-const canvas=document.querySelector('canvas'),status=document.querySelector('#status');
+import * as T from 'three';
+import {OrbitControls} from './vendor/OrbitControls.js';
+import {GLTFLoader} from './vendor/GLTFLoader.js';
+import {RoomEnvironment} from './vendor/RoomEnvironment.js';
+import {fitReferenceCamera} from './reference-camera.mjs';
+const canvas=document.querySelector('canvas'),status=document.querySelector('#status'),detail=document.querySelector('#detail');
+const buttons=[...document.querySelectorAll('[data-view]')];
+const referenceImage=document.querySelector('#reference-image');
+const references={
+ battery:{file:'048_v20-brake-pro-detail-2.jpg',size:[1920,1713],axles:[[352,1243],[1475,1217]],direction:[-.95,.30,3],fov:8,alt:'Foto original da V20 Brake Pro, vista pelo lado da bateria.'},
+ drive:{file:'042_v20-brake-pro-side.jpg',size:[1920,1920],axles:[[1558,1313],[390,1354]],direction:[-.65,.40,-3],fov:10,alt:'Foto original da V20 Brake Pro, vista pelo lado da corrente.'},
+ front:{file:'049_v20-brake-pro-detail-1.jpg',size:[1920,1713],axles:[[565,1260],[1483,1198]],direction:[-2.8,.42,3],fov:14,alt:'Foto original da V20 Brake Pro, vista frontal em três quartos.'}
+};
+let comparing=false,reference='battery';
+document.querySelector('#measurements-open').addEventListener('click',()=>document.querySelector('#measurements').showModal());
 try {
- const renderer=new T.WebGLRenderer({canvas,antialias:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.35;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
- const scene=new T.Scene();scene.background=new T.Color('#ded9cd');const camera=new T.PerspectiveCamera(36,1,.01,30);camera.position.set(-1.6,1.25,2.8);
- const controls=new OrbitControls(camera,canvas);controls.target.set(0,.57,0);controls.minDistance=1.6;controls.maxDistance=5;controls.maxPolarAngle=Math.PI*.49;controls.enablePan=false;controls.update();
- scene.add(new T.HemisphereLight(0xf8f4e9,0x6a6963,3));
- for(const [p,power] of [[[ -2,4,3],5],[[2,2,-3],4]]) {const light=new T.DirectionalLight(0xffffff,power);light.position.set(...p);light.castShadow=true;light.shadow.mapSize.set(2048,2048);light.shadow.camera.left=-2;light.shadow.camera.right=2;light.shadow.camera.top=2;light.shadow.camera.bottom=-2;light.shadow.bias=-.0002;scene.add(light);}
- const ground=new T.Mesh(new T.PlaneGeometry(200,200),new T.ShadowMaterial({opacity:.15}));ground.rotation.x=-Math.PI/2;ground.position.y=-.008;ground.receiveShadow=true;scene.add(ground);
- function render(){renderer.render(scene,camera);}controls.addEventListener('change',render);
- function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();render();}addEventListener('resize',resize);resize();
- new GLTFLoader().load('./v20-brake-pro-estudo.glb',g=>{g.scene.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});scene.add(g.scene);status.textContent='Arraste para girar · Pinça ou scroll para aproximar';render();window.bikeLoaded=true;},undefined,()=>{status.textContent='Não foi possível carregar o modelo. Recarregue a página.';});
- document.querySelector('#reset').onclick=()=>{camera.position.set(-1.6,1.25,2.8);controls.update();};document.querySelector('#side').onclick=()=>{camera.position.set(0,.8,3.1);controls.update();};
- canvas.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight'].includes(e.key))return;e.preventDefault();const offset=camera.position.clone().sub(controls.target);offset.applyAxisAngle(new T.Vector3(0,1,0),e.key==='ArrowLeft'?.15:-.15);camera.position.copy(controls.target).add(offset);controls.update();});
-}catch(e){status.textContent='Visualização 3D indisponível neste aparelho. O arquivo GLB continua disponível para download.';console.error(e);}
-</script></html>
+ const renderer=new T.WebGLRenderer({canvas,antialias:true});
+ renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1;
+ renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.VSMShadowMap;
+ const scene=new T.Scene();scene.background=new T.Color('#dedbd2');
+ const camera=new T.PerspectiveCamera(34,1,.015,80),controls=new OrbitControls(camera,canvas);
+ controls.enablePan=false;controls.minDistance=.3;controls.maxDistance=35;controls.maxPolarAngle=Math.PI*.49;
+ const room=new RoomEnvironment(),pmrem=new T.PMREMGenerator(renderer),environment=pmrem.fromScene(room,.04);
+ scene.environment=environment.texture;scene.environmentIntensity=.95;room.dispose();pmrem.dispose();
+ scene.add(new T.HemisphereLight(0xe6edf0,0x918a7b,.7));
+ const key=new T.DirectionalLight(0xfff4e3,1.5);key.position.set(-1.5,6,2);key.castShadow=true;
+ key.shadow.mapSize.set(2048,2048);Object.assign(key.shadow.camera,{left:-1.35,right:1.35,top:1.5,bottom:-1.5,near:.1,far:10});key.shadow.bias=-.00005;key.shadow.normalBias=.008;key.shadow.radius=5;key.shadow.blurSamples=8;scene.add(key);
+ const rim=new T.DirectionalLight(0xe3ebff,.9);rim.position.set(2,2,-3);scene.add(rim);
+ const ground=new T.Mesh(new T.PlaneGeometry(10,10),new T.ShadowMaterial({opacity:.16}));ground.rotation.x=-Math.PI/2;ground.position.y=-.005;ground.receiveShadow=true;scene.add(ground);
+ // Soft contact patches keep both tyres grounded without the old doubled shadows.
+ const c=document.createElement('canvas');c.width=c.height=128;const ctx=c.getContext('2d'),gradient=ctx.createRadialGradient(64,64,4,64,64,64);gradient.addColorStop(0,'rgba(22,24,22,.24)');gradient.addColorStop(1,'rgba(22,24,22,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,128,128);
+ const contactShadows=[],texture=new T.CanvasTexture(c);for(const x of [-.61,.61]){const s=new T.Mesh(new T.PlaneGeometry(.46,.25),new T.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false}));s.rotation.x=-Math.PI/2;s.position.set(x,-.003,0);scene.add(s);contactShadows.push(s);}
+ const views={
+ all:{p:[-1.4,1.13,3.15],t:[.02,.67,0],text:'Quadro, rodas e posição dos bancos.'},
+ side:{p:[0,.80,3.35],t:[0,.67,0],text:'Silhueta lateral e proporções gerais.'},
+ cockpit:{p:[-.06,1.49,.80],t:[-.41,1.14,0],text:'Hastes duplas, manoplas, manetes, painel e chicote.'},
+ seat:{p:[.91,1.195,.93],t:[.34,.84,0],text:'Estofado contornado, costuras e suporte traseiro.'},
+ battery:{p:[-.51,.85,1.02],t:[-.16,.59,0],text:'Logotipo original, tampa, fechadura e indicador da bateria.'},
+ drive:{p:[.37,.58,-.99],t:[.32,.35,0],text:'Corrente, cassete, câmbio, pedivela e pedais.'},
+ front:{p:[-1.36,1.10,.63],t:[-.51,.85,0],text:'Grade do farol, fixações e conjunto da suspensão.'}
+ };
+ let current='all',model,modelScale=1,groundOffset=0;
+ const modelPoint=p=>new T.Vector3(...p).multiplyScalar(modelScale).add(new T.Vector3(0,groundOffset,0));
+ function render(){renderer.render(scene,camera);}
+ function setView(name){
+  camera.clearViewOffset();camera.up.set(0,1,0);camera.fov=34;camera.updateProjectionMatrix();
+  current=name;const v=views[name],general=['all','side'].includes(name);
+  // Keep the bike inside portrait screens instead of relying on a fixed mobile zoom.
+  const scale=general?Math.max(1,1.02/camera.aspect):1.28*Math.max(1,.85/camera.aspect);
+  controls.target.copy(modelPoint(v.t));camera.position.copy(modelPoint(v.p)).sub(controls.target).multiplyScalar(scale).add(controls.target);controls.update();
+  buttons.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===name)));detail.textContent=v.text;render();
+ }
+ function alignReference(){
+  if(!model)return;
+  const ref=references[reference],side=Math.sign(ref.direction[2]);
+  const fit=fitReferenceCamera(camera,{width:canvas.clientWidth,height:canvas.clientHeight,photoSize:ref.size,photoAxles:ref.axles,modelAxles:[modelPoint([-.61,.309,.092*side]),modelPoint([.61,.309,.092*side])],direction:ref.direction,fov:ref.fov});
+  controls.target.copy(fit.target);controls.update();render();
+  canvas.dataset.anchorErrorPx=fit.maxAnchorErrorPx.toFixed(3);
+  detail.textContent='Enquadramento guiado pelos eixos das rodas. Ângulo, lente e pontos na foto são aproximados; diferenças de forma continuam visíveis.';
+ }
+ function resize(){const width=canvas.clientWidth,height=canvas.clientHeight;renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();comparing?alignReference():setView(current);}
+ function setComparison(enabled){
+  comparing=enabled;document.body.classList.toggle('comparing',enabled);
+  for(const id of ['reference-panel','model-label','compare-controls'])document.getElementById(id).hidden=!enabled;
+  document.querySelector('#view-controls').hidden=enabled;document.querySelector('#help').hidden=enabled;
+  document.querySelector('#explore-mode').setAttribute('aria-pressed',String(!enabled));document.querySelector('#compare-mode').setAttribute('aria-pressed',String(enabled));
+  scene.background.set(enabled?'#faf9f6':'#dedbd2');ground.visible=!enabled;contactShadows.forEach(s=>s.visible=!enabled);resize();
+ }
+ controls.addEventListener('change',render);addEventListener('resize',resize);resize();
+ new GLTFLoader().load('./v20-brake-pro-estudo.glb?v=6',g=>{
+  model=g.scene;model.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+  model.traverse(o=>{if(o.userData.dimensions){
+   const d=o.userData.dimensions,r=d.reconstructed;modelScale=d.authoringToMetres;groundOffset=r.groundOffset;
+   const cm=value=>(value*100).toLocaleString('pt-BR',{maximumFractionDigits:1});
+   document.querySelector('#reconstructed-size').textContent=`${cm(r.length)} × ${cm(r.width)} × ${cm(r.height)} cm (comprimento × largura × altura). Escala uniforme a partir do aro; não corresponde a uma medição da bike real.`;
+  }});
+  contactShadows.forEach((s,i)=>{s.position.x=(i===0?-.61:.61)*modelScale;s.scale.setScalar(modelScale);});
+  scene.add(model);status.textContent='Arraste para girar · Pinça ou scroll para aproximar';comparing?alignReference():setView(current);
+  canvas.dataset.loaded='true';canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.triangles=String(renderer.info.render.triangles);
+ },p=>{if(p.total)status.textContent='Carregando detalhes · '+Math.round(p.loaded/p.total*100)+'%';},()=>{status.textContent='O modelo não carregou. Recarregue para tentar novamente.';});
+ buttons.forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+ document.querySelector('#explore-mode').addEventListener('click',()=>setComparison(false));
+ document.querySelector('#compare-mode').addEventListener('click',()=>setComparison(true));
+ document.querySelector('#realign').addEventListener('click',alignReference);
+ document.querySelector('#reference-select').addEventListener('change',e=>{reference=e.target.value;const ref=references[reference];referenceImage.src='../imagens/'+ref.file;referenceImage.alt=ref.alt;document.querySelector('#reference-number').textContent=ref.file.slice(0,3);alignReference();});
+ if(new URLSearchParams(location.search).get('comparar')==='1')setComparison(true);
+ canvas.addEventListener('keydown',e=>{
+  if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-','='].includes(e.key))return;
+  e.preventDefault();const offset=camera.position.clone().sub(controls.target);
+  if(e.key==='ArrowLeft'||e.key==='ArrowRight')offset.applyAxisAngle(new T.Vector3(0,1,0),e.key==='ArrowLeft'?.14:-.14);
+  else if(['+','-','='].includes(e.key))offset.multiplyScalar(e.key==='-'?1.12:.9);
+  else {const spherical=new T.Spherical().setFromVector3(offset);spherical.phi=T.MathUtils.clamp(spherical.phi+(e.key==='ArrowUp'?-.08:.08),.12,Math.PI*.49);offset.setFromSpherical(spherical);}
+  offset.setLength(T.MathUtils.clamp(offset.length(),controls.minDistance,controls.maxDistance));camera.position.copy(controls.target).add(offset);controls.update();
+ });
+ canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();status.textContent='Visualização interrompida. Recarregue a página para retomar.';});
+}catch(error){status.textContent='3D indisponível neste aparelho. Você pode baixar o GLB.';console.error(error);}
+</script></body></html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex"><title>V20 Brake Pro · Experiência 3D</title>
+  <style>
+    *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:transparent}
+    canvas{display:block;width:100%;height:100%;touch-action:pan-y;outline-offset:-4px;cursor:grab}
+    canvas:focus-visible{outline:2px solid #82662b}
+    #status{position:absolute;bottom:4px;left:12px;right:12px;margin:0;text-align:center;font:11px system-ui;color:#464b3f}
+    #status:empty{display:none}
+  </style>
+  <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+  <canvas tabindex="0" aria-label="V20 Brake Pro em 3D. Arraste para girar. Duplo clique restaura a posição. Teclado: setas, mais e menos, Home. Use Tab para sair."></canvas>
+  <p id="status" role="status">Preparando a bike…</p>
+  <script type="module" src="./hero-viewer.mjs?v=8"></script>
+</body>
+</html>

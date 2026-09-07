@@ -7,6 +7,8 @@ import { business, stores, whatsappUrl } from "./data/business";
 import FeaturedCatalog from "./components/featured-catalog";
 import SiteFooter from "./components/site-footer";
 import Faq from "./components/faq";
+import HeroBikePreview from "./components/hero-bike-preview";
+import heroPreviewStyles from "./components/hero-bike-preview.module.css";
 import { getAllBikes, getBikeBySlug, getFeaturedBikes } from "./lib/catalog";
 
 type BookingForm = {
@@ -61,7 +63,7 @@ function ModelImage({ bike, className = "", priority = false, sizes = "(max-widt
 export default function Home() {
   const allBikes = useMemo(() => getAllBikes(), []);
   const featuredBikes = useMemo(() => getFeaturedBikes(), []);
-  const defaultBike = featuredBikes.find((bike) => bike.available) ?? allBikes[0];
+  const defaultBike = getBikeBySlug("inow-v20-brake-pro") ?? featuredBikes.find((bike) => bike.available) ?? allBikes[0];
   const [selectedId, setSelectedId] = useState(defaultBike?.id ?? "");
   const [quizResult, setQuizResult] = useState<Bike | null>(null);
   const [quizUse, setQuizUse] = useState<BikeUse | null>(null);
@@ -72,6 +74,7 @@ export default function Home() {
   const [motionReady, setMotionReady] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [minimumDate, setMinimumDate] = useState("");
+  const [hero3dEnabled, setHero3dEnabled] = useState(true);
   const bookingSubmitTimer = useRef<number | undefined>(undefined);
   const bookingSuccessRef = useRef<HTMLDivElement>(null);
   const selected = allBikes.find((bike) => bike.id === selectedId) ?? defaultBike;
@@ -82,7 +85,10 @@ export default function Home() {
     const localToday = new Date(now.getTime() - now.getTimezoneOffset() * 60_000).toISOString().slice(0, 10);
     setMinimumDate(localToday);
 
-    const modelReference = new URLSearchParams(window.location.search).get("model");
+    const query = new URLSearchParams(window.location.search);
+    const enabled3d = query.get("hero3d") !== "0";
+    setHero3dEnabled(enabled3d);
+    const modelReference = query.get("model");
     const requestedBike = modelReference ? getBikeBySlug(modelReference) ?? allBikes.find((bike) => bike.id === modelReference) : undefined;
     if (requestedBike) {
       setBooking((current) => ({ ...current, model: requestedBike.id }));
@@ -221,9 +227,9 @@ export default function Home() {
       </header>
       <div className="mobile-menu-shell"><div id="mobile-navigation" className="mobile-menu t-panel-slide" data-open={mobileMenuOpen} aria-hidden={!mobileMenuOpen} inert={!mobileMenuOpen}><nav aria-label="Navegação móvel"><a href="/modelos" onClick={() => setMobileMenuOpen(false)}>Modelos</a><a href="#experiencia" onClick={() => setMobileMenuOpen(false)}>A experiência</a><a href="#lojas" onClick={() => setMobileMenuOpen(false)}>Lojas</a><a href="#minha-flex" onClick={() => setMobileMenuOpen(false)}>Minha Flex</a></nav><a className="mobile-menu-cta" href="#test-ride" onClick={() => selected && startBooking(selected.id)}>Agendar test ride</a></div></div>
 
-      <section className="hero" id="top">
+      <section className={`hero ${hero3dEnabled && selected?.slug === "inow-v20-brake-pro" ? heroPreviewStyles.hero : ""}`} id="top">
         <div className="hero-copy"><p className="eyebrow"><span /> INOW × FLEXMOBI.RJ</p><h1>Viva o Rio<br /><i>no seu</i><br /><strong>ritmo.</strong></h1><p className="hero-lede">Bikes elétricas escolhidas para quem quer trocar o trânsito por mais cidade, mais liberdade e um caminho que combina com você.</p><div className="hero-actions"><a className="button button--amber" href="#test-ride" onClick={() => selected && startBooking(selected.id)}>Agendar test ride</a><a className="quiet-link" href="/modelos">Explorar modelos</a></div><div className="hero-signature"><span>ICARAÍ</span><i /> <span>IPANEMA</span><i /> <span>RIO DE JANEIRO</span></div></div>
-        {selected ? <div className="hero-product" aria-label="Modelo em destaque"><div className="hero-product-top"><span>01 / destaque</span><span>{selected.badge}</span></div><div className="hero-product-image"><ModelImage key={selected.id} bike={selected} className="hero-bike-image" priority sizes="(max-width: 820px) calc(100vw - 40px), 50vw" /></div><div className="hero-product-bottom"><div><span className="micro-label">Modelo em destaque</span><h2>{selected.name}</h2></div><div className="hero-price"><span>a partir de</span><strong>{selected.price}</strong></div></div><a className="product-corner-link" href={`/modelos/${selected.slug}`}>Abrir ficha</a></div> : null}
+        {selected ? <div className="hero-product" aria-label="Modelo em destaque"><div className="hero-product-top"><span>{"01 / destaque"}</span><span>{selected.badge}</span></div>{hero3dEnabled && selected.slug === "inow-v20-brake-pro" ? <HeroBikePreview key={selected.id} bike={selected} /> : <div className="hero-product-image"><ModelImage key={selected.id} bike={selected} className="hero-bike-image" priority sizes="(max-width: 820px) calc(100vw - 40px), 50vw" /></div>}<div className="hero-product-bottom"><div><span className="micro-label">Modelo em destaque</span><h2>{selected.name}</h2></div><div className="hero-price"><span>a partir de</span><strong>{selected.price}</strong></div></div><a className="product-corner-link" href={`/modelos/${selected.slug}`}>Abrir ficha</a></div> : null}
         <div className="hero-scroll"><span className="scroll-dot" /> role para explorar <span className="scroll-rule" /></div>
       </section>
 
