@@ -7,8 +7,11 @@ import { business, stores, whatsappUrl } from "./data/business";
 import FeaturedCatalog from "./components/featured-catalog";
 import SiteFooter from "./components/site-footer";
 import Faq from "./components/faq";
+import BrandLogo from "./components/brand-logo";
+import BookingDate from "./components/booking-date";
 import HeroBikePreview from "./components/hero-bike-preview";
 import heroPreviewStyles from "./components/hero-bike-preview.module.css";
+import finderStyles from "./components/bike-finder.module.css";
 import { getAllBikes, getBikeBySlug, getFeaturedBikes } from "./lib/catalog";
 
 type BookingForm = {
@@ -52,10 +55,6 @@ function formatBookingDate(value: string) {
 
 function ExternalArrow() { return <span aria-hidden="true">↗</span>; }
 
-function Brand({ footer = false }: { footer?: boolean }) {
-  return <a className={`brand ${footer ? "brand--footer" : ""}`} href="#top" aria-label="flexmobi.rj início"><span className="brand-mark">f</span><span className="brand-name">flexmobi</span><span className="brand-suffix">.rj</span></a>;
-}
-
 function ModelImage({ bike, className = "", priority = false, sizes = "(max-width: 820px) 100vw, 50vw" }: { bike: Bike; className?: string; priority?: boolean; sizes?: string }) {
   return <Image className={className} src={bike.image} alt={`${bike.name} — bicicleta elétrica INOW`} width={1600} height={1200} priority={priority} sizes={sizes} />;
 }
@@ -65,8 +64,10 @@ export default function Home() {
   const featuredBikes = useMemo(() => getFeaturedBikes(), []);
   const defaultBike = getBikeBySlug("inow-v20-brake-pro") ?? featuredBikes.find((bike) => bike.available) ?? allBikes[0];
   const [selectedId, setSelectedId] = useState(defaultBike?.id ?? "");
-  const [quizResult, setQuizResult] = useState<Bike | null>(null);
-  const [quizUse, setQuizUse] = useState<BikeUse | null>(null);
+  const [quizUse, setQuizUse] = useState<BikeUse>("cidade");
+  const quizResult = allBikes.filter((bike) => bike.available && bike.uses.includes(quizUse))
+    .sort((a, b) => (a.featuredOrder ?? Number.MAX_SAFE_INTEGER) - (b.featuredOrder ?? Number.MAX_SAFE_INTEGER))[0];
+  const useTitles: Record<BikeUse, string> = { cidade: "Facilitar meu dia a dia", compacta: "Guardar em pouco espaço", passageiro: "Levar alguém comigo", distancia: "Ir mais longe", performance: "Priorizar desempenho" };
   const [booking, setBooking] = useState<BookingForm>(initialBooking);
   const [bookingErrors, setBookingErrors] = useState<BookingErrors>({});
   const [bookingStatus, setBookingStatus] = useState<"idle" | "submitting" | "sent">("idle");
@@ -202,12 +203,7 @@ export default function Home() {
     }, 650);
   }
   function chooseQuiz(use: BikeUse) {
-    const recommendation = allBikes
-      .filter((bike) => bike.uses.includes(use))
-      .filter((bike) => bike.available)
-      .sort((a, b) => (a.featuredOrder ?? Number.MAX_SAFE_INTEGER) - (b.featuredOrder ?? Number.MAX_SAFE_INTEGER))[0] ?? null;
     setQuizUse(use);
-    setQuizResult(recommendation);
   }
   function startBooking(modelId: string) {
     window.clearTimeout(bookingSubmitTimer.current);
@@ -220,7 +216,7 @@ export default function Home() {
   return (
     <main data-motion-ready={motionReady}>
       <header className="site-header">
-        <Brand />
+        <BrandLogo priority />
         <nav className="desktop-nav" aria-label="Navegação principal"><a href="/modelos">Modelos</a><a href="#experiencia">A experiência</a><a href="#lojas">Lojas</a><a href="#minha-flex">Minha Flex</a></nav>
         <a className="header-cta" href="#test-ride" onClick={() => selected && startBooking(selected.id)}>Agendar test ride</a>
         <button className="mobile-menu-trigger" type="button" aria-expanded={mobileMenuOpen} aria-controls="mobile-navigation" aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"} onClick={() => setMobileMenuOpen((open) => !open)}><span /><span /></button>
@@ -239,11 +235,34 @@ export default function Home() {
         <FeaturedCatalog bikes={featuredBikes.slice(0, 4)} />
       </section>
 
-      <section className="quiz section" id="quiz"><div className="quiz-heading"><p className="eyebrow"><span /> Curadoria rápida</p><h2>Qual é a<br /><i>sua bike?</i></h2><p>Alguns caminhos para começar. No atendimento, a gente aprofunda junto com você.</p></div><div className="quiz-panel"><p className="micro-label">O que pesa mais na sua escolha?</p><div className="quiz-options">{bikeUses.map((option) => <button type="button" key={option.id} onClick={() => chooseQuiz(option.id)} aria-pressed={quizUse === option.id} className={quizUse === option.id ? "is-selected" : ""}><span>{option.label}</span><small>{option.description}</small><span className="quiz-choice-indicator" aria-hidden="true" /></button>)}</div>{quizResult && <div className="quiz-result"><ModelImage bike={quizResult} sizes="128px" /><div><span>Seu ponto de partida</span><strong>{quizResult.name}</strong><p>{quizResult.feature}</p><a href={`/modelos/${quizResult.slug}`}>Ver ficha</a><a href={`/modelos?uso=${encodeURIComponent(quizUse ?? "")}`}>Ver opções para este uso</a><a href="#test-ride" onClick={() => startBooking(quizResult.id)}>Agendar test ride</a></div></div>}</div></section>
+      <section className={`section ${finderStyles.finder}`} id="quiz" aria-labelledby="finder-title">
+        <div className={finderStyles.choices}>
+          <p className="eyebrow"><span /> Encontre seu ritmo</p>
+          <h2 id="finder-title">Seu caminho.<br /><em>Sua bike.</em></h2>
+          <p className={finderStyles.intro}>Como você quer usar sua bike? Escolha uma prioridade e descubra um ponto de partida.</p>
+          <div className={finderStyles.options} aria-label="Sua prioridade">
+            {bikeUses.map((option) => <button type="button" key={option.id} onClick={() => chooseQuiz(option.id)} aria-pressed={quizUse === option.id} aria-controls="finder-result">
+              <span>{useTitles[option.id]}<small>{option.description}</small></span>
+            </button>)}
+          </div>
+        </div>
+        <div className={finderStyles.result} id="finder-result">
+          {quizResult ? <>
+            <div className={finderStyles.photo}><span className={finderStyles.caption}>Uma possibilidade para você / {bikeUses.find((use) => use.id === quizUse)?.label}</span><ModelImage bike={quizResult} sizes="(max-width: 820px) 100vw, 55vw" /></div>
+            <div className={finderStyles.details}>
+              <div className={finderStyles.title}><h3>{quizResult.name}</h3><p><small>A partir de</small>{quizResult.price}</p></div>
+              <p className={finderStyles.reason}>{quizResult.detail}</p>
+              <div className={finderStyles.actions}><a className="button button--amber" href={`/modelos/${quizResult.slug}`}>Conhecer esta bike</a><a href="#test-ride" onClick={() => startBooking(quizResult.id)}>Agendar test ride</a></div>
+              <p className={finderStyles.note}>Uma sugestão inicial. A escolha final acontece com você, na loja.</p>
+            </div>
+          </> : <p>Nenhuma bike disponível para esta prioridade. <a href="/modelos">Explore o catálogo</a>.</p>}
+        </div>
+        <span className={finderStyles.srOnly} role="status">{quizResult ? `Sugestão para ${useTitles[quizUse]}: ${quizResult.name}, a partir de ${quizResult.price}.` : "Nenhuma bike disponível para esta prioridade."}</span>
+      </section>
 
-      <section className="experience section" id="experiencia"><div className="experience-visual" data-reveal><Image src="/imagens/otimizadas/015_v35-outdoor-front.jpg.webp" width={1600} height={1200} sizes="(max-width: 820px) calc(100vw - 40px), 50vw" className="experience-image" alt="INOW V35 em um ambiente urbano" /><div className="image-caption"><span>INOW V35 / CIDADE ABERTA</span><b>o Rio<br /><i>é seu.</i></b></div></div><div className="experience-copy" data-reveal><p className="eyebrow"><span /> O jeito Flex de atender</p><h2>Não é só<br /><i>escolher.</i></h2><p>Você senta, acelera, sente a suspensão e conversa com quem entende do assunto. A bike certa aparece no encontro — não em uma tela cheia de promessa.</p><div className="service-list"><a href="#test-ride" onClick={() => selected && startBooking(selected.id)}><span>01</span><strong>Test ride no seu ritmo</strong></a><a href="#test-ride"><span>02</span><strong>Revisão especializada</strong></a><a href="#lojas"><span>03</span><strong>Duas lojas, perto de você</strong></a></div></div></section>
+      <section className="experience section" id="experiencia"><div className="experience-visual" data-reveal><Image src="/imagens/otimizadas/015_v35-outdoor-front.jpg.webp" width={1600} height={1200} sizes="(max-width: 820px) calc(100vw - 40px), 50vw" className="experience-image" alt="INOW V35 em um ambiente urbano" /><div className="image-caption"><span>INOW V35 / CIDADE ABERTA</span><b>o Rio<br /><i>é seu.</i></b></div></div><div className="experience-copy" data-reveal><p className="eyebrow"><span /> O jeito Flex de atender</p><h2>Não é só<br /><i>escolher.</i></h2><p>Você senta, acelera, sente a suspensão e conversa com quem entende do assunto. A bike certa aparece no encontro — não em uma tela cheia de promessa.</p><div className="service-list"><a href="#test-ride" onClick={() => selected && startBooking(selected.id)}><strong>Test ride no seu ritmo</strong></a><a href="#test-ride"><strong>Revisão especializada</strong></a><a href="#lojas"><strong>Duas lojas, perto de você</strong></a></div></div></section>
 
-      <section className="stores section" id="lojas"><div className="section-intro"><div><p className="eyebrow eyebrow--dark"><span /> Onde encontrar</p><h2>Duas lojas.<br /><i>Um só movimento.</i></h2></div><p className="section-note">Veja qual endereço encaixa no seu caminho. O melhor test ride começa pela porta mais próxima.</p></div><div className="store-list">{stores.map((store) => <article key={store.name} className="store-item"><span className="store-number">{store.number}</span><div className="store-main"><p>{store.city}</p><h3>{store.name}</h3><span>{store.address}</span></div><p className="store-note">{store.note}</p><a className="quiet-link quiet-link--dark" href={store.map} target="_blank" rel="noreferrer">Abrir no Maps <ExternalArrow /></a></article>)}</div></section>
+      <section className="stores section" id="lojas"><div className="section-intro"><div><p className="eyebrow eyebrow--dark"><span /> Onde encontrar</p><h2>Duas lojas.<br /><i>Um só movimento.</i></h2></div><p className="section-note">Veja qual endereço encaixa no seu caminho. O melhor test ride começa pela porta mais próxima.</p></div><div className="store-list">{stores.map((store) => <article key={store.name} className="store-item"><div className="store-main"><p>{store.city}</p><h3>{store.name}</h3><span>{store.address}</span></div><p className="store-note">{store.note}</p><a className="quiet-link quiet-link--dark" href={store.map} target="_blank" rel="noreferrer">Abrir no Maps <ExternalArrow /></a></article>)}</div></section>
 
       <section className="booking section" id="test-ride">
         <div className="booking-copy">
@@ -251,9 +270,9 @@ export default function Home() {
           <h2>Vem<br /><i>sentir.</i></h2>
           <p>Escolha sua bike, uma loja e o melhor dia. A equipe entra em contato para combinar o horário.</p>
           <div className="booking-steps" aria-label="Como funciona o pedido">
-            <span><b>01</b><strong>Escolha a bike</strong><small>Comece pelo modelo que chamou sua atenção.</small></span>
-            <span><b>02</b><strong>Marque loja e dia</strong><small>Você indica a preferência; a equipe confirma.</small></span>
-            <span><b>03</b><strong>Experimente na rua</strong><small>Sem pagamento online e sem compromisso.</small></span>
+            <span><strong>Escolha a bike</strong><small>Comece pelo modelo que chamou sua atenção.</small></span>
+            <span><strong>Marque loja e dia</strong><small>Você indica a preferência; a equipe confirma.</small></span>
+            <span><strong>Experimente na rua</strong><small>Sem pagamento online e sem compromisso.</small></span>
           </div>
         </div>
         <div className="booking-panel">
@@ -279,7 +298,7 @@ export default function Home() {
                 <span>Leva menos de 1 minuto</span>
               </div>
               {bookingBike ? <div className="booking-bike-preview" aria-live="polite">
-                <div><ModelImage bike={bookingBike} sizes="132px" /></div>
+                <div><ModelImage bike={bookingBike} sizes="132px" priority /></div>
                 <p><span>Bike em destaque</span><strong>{bookingBike.name}</strong><small>{bookingBike.category} · {bookingBike.motor}</small></p>
                 <a href={`/modelos/${bookingBike.slug}`}>Ver ficha</a>
               </div> : null}
@@ -302,10 +321,7 @@ export default function Home() {
                   <select className={`t-input ${bookingErrors.model ? "is-error" : ""}`} required name="model" value={booking.model} disabled={bookingStatus === "submitting"} aria-invalid={Boolean(bookingErrors.model)} aria-describedby="booking-model-error" onChange={(event) => updateBooking("model", event.target.value)}><option value="" disabled>Escolha uma bike</option>{allBikes.map((bike) => <option key={bike.id} value={bike.id}>{bike.name}</option>)}</select>
                   <span id="booking-model-error" className="field-error t-error-msg" aria-live="polite">{bookingErrors.model}</span>
                 </label>
-                <label className={`booking-field t-input-wrap ${bookingErrors.date ? "is-error" : ""}`} data-field="date">Data
-                  <input className={`t-input ${bookingErrors.date ? "is-error" : ""}`} required name="date" type="date" min={minimumDate || undefined} value={booking.date} disabled={bookingStatus === "submitting"} aria-invalid={Boolean(bookingErrors.date)} aria-describedby="booking-date-error" onChange={(event) => updateBooking("date", event.target.value)} />
-                  <span id="booking-date-error" className="field-error t-error-msg" aria-live="polite">{bookingErrors.date}</span>
-                </label>
+              <BookingDate value={booking.date} minimumDate={minimumDate} disabled={bookingStatus === "submitting"} error={bookingErrors.date} onChange={value => updateBooking("date", value)} />
               </div>
               <button className="button button--amber booking-submit" type="submit" disabled={bookingStatus === "submitting"}>{bookingStatus === "submitting" ? <><span className="booking-spinner" aria-hidden="true" /> Preparando pedido...</> : <>Quero fazer o test ride</>}</button>
               <small className="booking-privacy">{business.whatsapp ? "Você revisa os dados antes de abrir o WhatsApp. A loja confirma o horário antes da visita." : "Protótipo demonstrativo · Nada é enviado nesta versão · A loja confirma o horário antes da visita."} <a href="/privacidade">Privacidade e uso dos dados</a>{business.responseTime ? ` · ${business.responseTime}` : ""}</small>
@@ -314,7 +330,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="member" id="minha-flex"><div><p className="eyebrow eyebrow--dark"><span /> Próximas possibilidades</p><h2>Depois, a <i>Flex</i><br />continua.</h2><p>Uma segunda fase pode reunir revisões, acompanhamento da bike e benefícios — depois de definir a rotina da loja e as regras comerciais.</p></div><div className="member-links"><span><b>01</b> Histórico da bike <em>em estudo</em></span><span><b>02</b> Agenda de revisão <em>em estudo</em></span><span><b>03</b> Programa de indicação <em>em estudo</em></span><small>Funcionalidades futuras — não fazem parte desta primeira entrega.</small></div></section>
+      <section className="member" id="minha-flex"><div><p className="eyebrow eyebrow--dark"><span /> Próximas possibilidades</p><h2>Depois, a <i>Flex</i><br />continua.</h2><p>Uma segunda fase pode reunir revisões, acompanhamento da bike e benefícios — depois de definir a rotina da loja e as regras comerciais.</p></div><div className="member-links"><span> Histórico da bike <em>em estudo</em></span><span> Agenda de revisão <em>em estudo</em></span><span> Programa de indicação <em>em estudo</em></span><small>Funcionalidades futuras — não fazem parte desta primeira entrega.</small></div></section>
       <Faq />
       <SiteFooter />
       <a className="home-mobile-cta" href="#test-ride" onClick={() => selected && startBooking(selected.id)}>Agendar test ride</a>

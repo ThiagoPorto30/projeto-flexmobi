@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Bike, bikeUses } from "../data/catalog";
+import { Bike } from "../data/catalog";
 import styles from "./featured-catalog.module.css";
 
 type FeaturedCatalogProps = {
@@ -34,15 +34,11 @@ export default function FeaturedCatalog({ bikes }: FeaturedCatalogProps) {
             <h3>{bike.name}</h3>
             <p className={styles.detail}>{bike.detail}</p>
             <div className={styles.price}><span>a partir de</span><strong>{bike.price}</strong></div>
-            <a className={styles.cardLink} href={`/modelos/${bike.slug}`}>Ver ficha <span aria-hidden="true">→</span></a>
+            <a className={styles.cardLink} href={`/modelos/${bike.slug}`}>Ver ficha </a>
           </article>
         ))}
       </div>
 
-      <div className={styles.uses} data-reveal>
-        <div><p className="micro-label">Encontre pelo seu uso</p><p>Prefere começar pelo caminho, e não pelo modelo? Veja as opções que combinam com sua rotina.</p></div>
-        <div className={styles.useLinks}>{bikeUses.map((use) => <a key={use.id} href={`/modelos?uso=${encodeURIComponent(use.id)}`}><span>{use.label}</span><small>{use.description}</small></a>)}</div>
-      </div>
     </div>
   );
 }

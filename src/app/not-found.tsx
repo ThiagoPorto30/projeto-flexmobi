@@ -1,14 +1,11 @@
 import Link from "next/link";
+import BrandLogo from "./components/brand-logo";
 
 export default function NotFound() {
   return (
     <main className="not-found-page">
       <header className="not-found-header">
-        <Link className="brand" href="/#top" aria-label="flexmobi.rj — página inicial">
-          <span className="brand-mark">f</span>
-          <span className="brand-name">flexmobi</span>
-          <span className="brand-suffix">.rj</span>
-        </Link>
+        <BrandLogo priority />
         <span>Erro 404 / rota fora do mapa</span>
       </header>
 

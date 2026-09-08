@@ -17,7 +17,9 @@ export type ProductDetail = {
   idealFor: string[];
 };
 
-const paths = (...files: string[]) => files.map((file) => `/imagens/${file}`);
+const paths = (...files: string[]) => files.map((file) =>
+  file.endsWith(".webp") ? `/imagens/${file}` : `/imagens/otimizadas/${file}.webp`
+);
 
 export const productDetails: Record<string, ProductDetail> = {
   "inow-v20-mini": {

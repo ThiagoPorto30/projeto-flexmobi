@@ -1,0 +1,18 @@
+.footer:global(.site-footer) { background: #11140f; color: #b3b7a8; border-top: 1px solid #373c30; padding-top: 52px; }
+.grid { display: grid; grid-template-columns: 1fr 1.15fr 1.15fr .85fr; gap: clamp(24px, 3vw, 48px); }
+.identity > p { margin: 0 0 20px; font: 12px/1.7 var(--body); }
+.identity :global(.brand-profile) { width: 190px; height: 76px; flex-basis: 190px; max-width: 100%; }
+.identity :global(.brand-profile img) { object-fit: cover; }
+.social { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font: 11px var(--mono); }
+.label { display: block; margin-bottom: 18px; color: #bca978; font: 9px/1.5 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.store h3 { color: #efede3; font: 500 27px/1.1 var(--body); margin: 0 0 14px; letter-spacing: -.03em; }
+.store address { font: 12px/1.7 var(--body); }
+.map { display: inline-flex; align-items: center; min-height: 44px; gap: 10px; font-size: 11px; }
+.whatsapp { display: flex !important; align-items: center; gap: 12px; min-height: 68px; margin-top: 12px; padding-top: 16px; border-top: 1px solid #33382d; font: 12px/1.5 var(--body); }
+.whatsapp svg { flex-shrink: 0; color: #d0bd89; }
+.whatsapp small { display: block; color: #aeb3a2; font-size: 10px; margin-bottom: 3px; }
+.nav a { min-height: 32px; font: 12px/1.6 var(--body); }
+.nav .label { margin-bottom: 8px; }
+.footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
+@media(max-width: 1000px) { .grid { grid-template-columns: 1fr 1fr; gap: 32px; } }
+@media(max-width: 540px) { .grid { grid-template-columns: 1fr; gap: 30px; } .store { padding-bottom: 20px; border-bottom: 1px solid #33382d; } .nav { display: grid !important; grid-template-columns: 1fr 1fr; } .nav .label { grid-column: 1 / -1; } }

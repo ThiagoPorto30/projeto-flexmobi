@@ -16,4 +16,19 @@
 .bottom strong { display: block; margin-top: 7px; font: 600 19px var(--mono); }
 .details { display: flex; justify-content: space-between; margin-top: 20px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; }
 .link:hover .details { color: var(--amber-dark); }
-@media(max-width: 560px) { .copy h3 { min-height: 0; } }
+@media(max-width: 560px) {
+  .link { display: grid; grid-template-columns: minmax(126px, 42%) minmax(0, 1fr); }
+  .visual { min-height: 248px; aspect-ratio: auto; }
+  .visual img { padding: 8px; }
+  .badge { top: 10px; left: 10px; max-width: calc(100% - 20px); padding: 5px 7px; font-size: 8px; }
+  .copy { min-width: 0; padding: 16px 14px; display: flex; flex-direction: column; }
+  .category { margin: 0; font-size: 8px; }
+  .copy h3 { min-height: 0; margin: 7px 0 9px; font-size: clamp(25px, 8vw, 31px); overflow-wrap: anywhere; }
+  .feature, .status { display: none; }
+  .specs { gap: 8px; margin: 8px 0 0; padding: 11px 0; }
+  .specs dt, .bottom small { font-size: 8px; line-height: 1.35; }
+  .specs dd { margin-top: 5px; font-size: 11px; }
+  .bottom { margin-top: auto; }
+  .bottom strong { margin-top: 5px; font-size: 16px; }
+  .details { min-height: 44px; align-items: center; margin-top: 10px; padding-top: 9px; font-size: 10px; }
+}

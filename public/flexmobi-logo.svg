@@ -1,8 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 7 136 136" role="img" aria-labelledby="title desc">
+  <title id="title">Flex Mobi</title>
+  <desc id="desc">Lettering Flex Mobi original, sem aro, com fundo transparente.</desc>
   <defs>
     <clipPath id="wordmark"><rect x="17" y="62" width="126" height="27"/></clipPath>
     <filter id="clear-black" color-interpolation-filters="sRGB">
       <feColorMatrix type="matrix" values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  .333 .333 .334 0 0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="1.16" intercept="-.04"/></feComponentTransfer>
     </filter>
   </defs>
   <g clip-path="url(#wordmark)" filter="url(#clear-black)">

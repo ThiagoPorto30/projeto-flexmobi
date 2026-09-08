@@ -21,10 +21,7 @@
   backdrop-filter: blur(14px);
 }
 
-.brand { display: inline-flex; align-items: baseline; gap: 6px; color: var(--paper); font-weight: 600; letter-spacing: -.06em; }
-.brandMark { width: 21px; height: 21px; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px; color: var(--ink); background: var(--amber); border-radius: 50%; font: 700 17px/1 var(--display); letter-spacing: -.1em; }
-.brandName { font-size: 19px; }
-.brandSuffix { color: var(--amber); font: 600 12px var(--mono); letter-spacing: -.08em; }
+.brand { color: var(--paper); }
 .nav { display: flex; gap: clamp(18px, 3vw, 44px); margin-left: 8vw; color: #bbb9af; font: 500 10px var(--mono); text-transform: uppercase; letter-spacing: .05em; }
 .nav a { transition: color var(--duration-fast) var(--ease-smooth-out); }
 .nav a:hover { color: var(--amber-light); }
@@ -142,7 +139,7 @@
 .sectionHeading h2, .technicalTitle h2, .relatedHeader h2, .closing h2 { margin: 21px 0 0; font: 600 clamp(65px, 8vw, 122px)/.78 var(--display); letter-spacing: -.065em; text-transform: uppercase; }
 .sectionHeading h2 i, .technicalTitle h2 i, .relatedHeader h2 i, .closing h2 i { color: rgba(34,35,30,.56); -webkit-text-stroke-color: rgba(34,35,30,.56); font-style: normal; }
 .highlightList { border-top: 1px solid var(--line); }
-.highlightList article { display: grid; grid-template-columns: 50px minmax(190px, .8fr) 1.2fr; gap: 25px; align-items: baseline; padding: 31px 0; border-bottom: 1px solid var(--line); }
+.highlightList article { display: grid; grid-template-columns: minmax(190px, .8fr) 1.2fr; gap: 25px; align-items: baseline; padding: 31px 0; border-bottom: 1px solid var(--line); }
 .highlightList article > span { color: var(--amber-dark); font: 500 10px var(--mono); }
 .highlightList h3 { margin: 0; font: 600 clamp(27px, 3vw, 42px)/.9 var(--display); letter-spacing: -.035em; text-transform: uppercase; }
 .highlightList p { max-width: 330px; margin: 0; color: #6d6e66; font-size: 12px; line-height: 1.65; }
@@ -175,7 +172,7 @@
 .relatedHeader { display: flex; justify-content: space-between; align-items: flex-end; gap: 35px; margin-bottom: 55px; }
 .relatedHeader > a { display: inline-flex; gap: 11px; align-items: center; color: var(--amber-dark); font: 500 10px var(--mono); }
 .relatedList { border-top: 1px solid var(--line); }
-.relatedList > a { min-height: 153px; display: grid; grid-template-columns: 42px 175px 1fr auto 30px; gap: 25px; align-items: center; border-bottom: 1px solid var(--line); transition: background var(--duration-fast) var(--ease-smooth-out); }
+.relatedList > a { min-height: 153px; display: grid; grid-template-columns: 175px 1fr auto; gap: 25px; align-items: center; border-bottom: 1px solid var(--line); transition: background var(--duration-fast) var(--ease-smooth-out); }
 .relatedList > a > * { transition: transform var(--duration-medium) var(--ease-smooth-out); }
 .relatedList > a:hover { background: rgba(241,238,230,.65); }
 .relatedList > a:hover > * { transform: translate3d(var(--distance-base), 0, 0); transition-duration: var(--duration-fast); }
@@ -246,7 +243,7 @@
   .productIntro h1 { font-size: clamp(70px, 9vw, 100px); }
   .actions { grid-template-columns: 1fr; }
   .serviceNotes { grid-template-columns: 1fr; }
-  .relatedList > a { grid-template-columns: 35px 135px 1fr auto 25px; }
+  .relatedList > a { grid-template-columns: 135px 1fr auto; }
   .relatedImage { width: 135px; height: 95px; }
 }
 
@@ -257,6 +254,7 @@
   .header { padding-right: max(24px, env(safe-area-inset-right)); padding-left: max(24px, env(safe-area-inset-left)); }
   .mobileMenu { padding-right: max(20px, env(safe-area-inset-right)); padding-bottom: calc(28px + env(safe-area-inset-bottom)); padding-left: max(20px, env(safe-area-inset-left)); }
   .hero { display: block; min-height: auto; padding-top: 39px; }
+  .brand, .relatedHeader > a { min-height: 44px; display: inline-flex; align-items: center; }
   .breadcrumbs { top: 18px; }
   .gallery { min-height: auto; height: min(720px, 88vh); border-right: 0; border-bottom: 1px solid var(--line); }
   .productIntro { padding: 58px 24px 68px; }
@@ -277,7 +275,7 @@
   .technicalTitle > p:last-child { margin-top: 35px; }
   .technicalBody { grid-template-columns: 1fr; }
   .technicalBody aside { max-width: 520px; }
-  .relatedList > a { grid-template-columns: 33px 105px 1fr 25px; gap: 14px; }
+  .relatedList > a { grid-template-columns: 105px 1fr; gap: 14px; }
   .relatedImage { width: 105px; height: 84px; }
   .relatedPrice { display: none; }
   .footer { padding-bottom: calc(65px + env(safe-area-inset-bottom)); }
@@ -292,7 +290,7 @@
   .thumbnails::-webkit-scrollbar { display: none; }
   .thumbnails button { height: 58px; flex: 0 0 58px; scroll-snap-align: start; }
   .introTopline { align-items: flex-start; flex-direction: column; }
-  .productIntro h1 { font-size: clamp(76px, 25vw, 110px); }
+  .productIntro h1 { font-size: clamp(60px, 17vw, 76px); line-height: .8; }
   .feature { font-size: 28px; }
   .priceBlock { align-items: flex-start; flex-direction: column; }
   .priceBlock > small { max-width: 300px; }
@@ -303,8 +301,8 @@
   .specStrip strong { font-size: 19px; }
   .storyImage { min-height: 430px; }
   .storyCopy h2 { font-size: 64px; }
-  .highlightList article { grid-template-columns: 35px 1fr; gap: 15px; }
-  .highlightList article p { grid-column: 2; }
+  .highlightList article { grid-template-columns: 1fr; gap: 15px; }
+  .highlightList article p { grid-column: 1; }
   .detailGallery { min-height: 720px; grid-template-columns: 1fr; grid-template-rows: 1fr .72fr; }
   .detailGallery > div { min-height: 0; }
   .detailGallery > p { bottom: 35px; font-size: 39px; }
@@ -312,7 +310,7 @@
   .technicalBody { margin-top: 50px; }
   .technicalRows > div { grid-template-columns: .8fr 1.2fr; gap: 18px; }
   .relatedHeader { align-items: flex-start; flex-direction: column; }
-  .relatedList > a { min-height: 115px; grid-template-columns: 24px 76px 1fr 16px; gap: 10px; }
+  .relatedList > a { min-height: 115px; grid-template-columns: 76px 1fr; gap: 10px; }
   .relatedImage { width: 76px; height: 66px; }
   .relatedName strong { font-size: 28px; }
   .footer { min-height: 155px; align-items: flex-start; flex-direction: column; justify-content: center; gap: 6px; }

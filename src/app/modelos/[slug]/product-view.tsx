@@ -7,22 +7,13 @@ import type { Bike } from "../../data/catalog";
 import type { ProductDetail } from "../../data/product-details";
 import styles from "./product.module.css";
 import SiteFooter from "../../components/site-footer";
+import BrandLogo from "../../components/brand-logo";
 
 type ProductViewProps = {
   bike: Bike;
   details: ProductDetail;
   related: Bike[];
 };
-
-function Brand() {
-  return (
-    <Link className={styles.brand} href="/#top" aria-label="flexmobi.rj — página inicial">
-      <span className={styles.brandMark}>f</span>
-      <span className={styles.brandName}>flexmobi</span>
-      <span className={styles.brandSuffix}>.rj</span>
-    </Link>
-  );
-}
 
 export default function ProductView({ bike, details, related }: ProductViewProps) {
   const [activeImage, setActiveImage] = useState(0);
@@ -101,7 +92,7 @@ export default function ProductView({ bike, details, related }: ProductViewProps
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <Brand />
+        <BrandLogo className={styles.brand} priority />
         <nav className={styles.nav} aria-label="Navegação do produto">
           <Link href="/modelos">Modelos</Link>
           <a href="#desempenho">Destaques</a>
@@ -162,7 +153,6 @@ export default function ProductView({ bike, details, related }: ProductViewProps
                 onClick={() => showImage(index)}
               >
                 <Image src={image} alt="" fill sizes="92px" priority={index === 0} />
-                <span>{String(index + 1).padStart(2, "0")}</span>
               </button>
             ))}
           </div>
@@ -202,17 +192,17 @@ export default function ProductView({ bike, details, related }: ProductViewProps
           </div>
 
           <div className={styles.serviceNotes}>
-            <span><b>01</b> Atendimento presencial</span>
-            <span><b>02</b> Assistência especializada</span>
-            <span><b>03</b> Sem pagamento online</span>
+            <span>Atendimento presencial</span>
+            <span>Assistência especializada</span>
+            <span>Sem pagamento online</span>
           </div>
         </div>
       </section>
 
       <section className={styles.specStrip} aria-label="Especificações principais">
-        {baseSpecs.map((spec, index) => (
+        {baseSpecs.map((spec) => (
           <div key={spec.label}>
-            <span>{String(index + 1).padStart(2, "0")} / {spec.label}</span>
+            <span>{spec.label}</span>
             <strong>{spec.value}</strong>
           </div>
         ))}
@@ -239,7 +229,6 @@ export default function ProductView({ bike, details, related }: ProductViewProps
         <div className={styles.highlightList}>
           {details.highlights.map((highlight) => (
             <article key={highlight.index}>
-              <span>{highlight.index}</span>
               <h3>{highlight.title}</h3>
               <p>{highlight.body}</p>
             </article>
@@ -267,7 +256,7 @@ export default function ProductView({ bike, details, related }: ProductViewProps
           </div>
           <aside>
             <span>Ideal para</span>
-            {details.idealFor.map((item, index) => <p key={item}><b>{String(index + 1).padStart(2, "0")}</b>{item}</p>)}
+            {details.idealFor.map((item) => <p key={item}>{item}</p>)}
             <small>Garantia, documentação e condições comerciais são confirmadas no atendimento da loja.</small>
           </aside>
         </div>
@@ -279,13 +268,12 @@ export default function ProductView({ bike, details, related }: ProductViewProps
           <Link href="/modelos">Ver catálogo completo</Link>
         </div>
         <div className={styles.relatedList}>
-          {related.map((item, index) => (
+          {related.map((item) => (
             <Link href={`/modelos/${item.slug}`} key={item.id}>
-              <span className={styles.relatedIndex}>{String(index + 1).padStart(2, "0")}</span>
               <span className={styles.relatedImage}><Image src={item.image} alt="" fill sizes="180px" /></span>
               <span className={styles.relatedName}><small>{item.category}</small><strong>{item.name}</strong></span>
               <span className={styles.relatedPrice}><small>a partir de</small>{item.price}</span>
-              <span className={styles.relatedArrow} aria-hidden="true">→</span>
+
             </Link>
           ))}
         </div>

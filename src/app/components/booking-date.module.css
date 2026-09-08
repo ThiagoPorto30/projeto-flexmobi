@@ -1,0 +1,25 @@
+.trigger { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 36px; padding: 0; background: transparent; border: 0; color: #35392e; font: 13px var(--body); text-align: left; cursor: pointer; }
+.trigger:disabled { opacity: .5; cursor: wait; }
+.dialog { position: fixed; margin: 0; width: 292px; max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; box-sizing: border-box; padding: 12px; background: #f8f5ee; color: #30362b; border: 1px solid #cbc3b2; border-radius: 6px; box-shadow: 0 8px 28px #0003; font: 13px var(--body); text-transform: none; letter-spacing: 0; }
+.dialog::backdrop { background: transparent; }
+.dialog button { background: transparent; border: 0; color: inherit; cursor: pointer; }
+.heading,.month,.bottom { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.heading { border-bottom: 1px solid #ccc4b2; padding-bottom: 6px; color: #67664f; font-size: 11px; }
+.heading button { width: 32px; height: 32px; font-size: 24px; }
+.month { margin: 0 0 8px; }
+.month strong { font-size: 13px; font-weight: 600; text-transform: none; }
+.month button { width: 36px; height: 36px; font-size: 23px; }
+.days { display: grid; grid-template-columns: repeat(7,1fr); gap: 2px; text-align: center; }
+.days > span { font-size: 10px; color: #737461; padding: 6px 0; }
+.days button { height: 36px; border-radius: 4px; font: 12px var(--body); }
+.dialog button:hover:not(:disabled) { background: #dfd4b7; }
+.days button[aria-pressed="true"] { background: #bea05a; color: #161b12; font-weight: 700; }
+.dialog button:disabled { opacity: .3; cursor: default; }
+.dialog button:focus-visible,.trigger:focus-visible { outline: 2px solid #82682e; outline-offset: 1px; }
+.bottom { margin-top: 12px; padding-top: 8px; border-top: 1px solid #ccc4b2; font-size: 9px; color: #696b5a; }
+.bottom button { min-height: 32px; font-size: 11px; }
+@media(max-width:820px) { .trigger { min-height:44px; } }
+.field { min-height: 60px; padding: 8px 12px 4px; border: 1px solid transparent; background: rgba(223, 218, 206, .28); display: flex; flex-direction: column; gap: 2px; }
+.field > span:first-child { font: 500 9px var(--mono); text-transform: uppercase; letter-spacing: .04em; color: #6c6d60; }
+.field:focus-within { border-color: #a18a54; }
+.field .trigger { font-family: var(--mono); }

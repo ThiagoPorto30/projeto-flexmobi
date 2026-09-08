@@ -41,19 +41,19 @@ try {
   const generator = new T.PMREMGenerator(renderer);
   const environment = generator.fromScene(room, .04);
   scene.environment = environment.texture;
-  scene.environmentIntensity = 1.05;
+  scene.environmentIntensity = .85;
   room.dispose(); generator.dispose();
   scene.add(new T.HemisphereLight(0xf2eee3, 0x8a7960, 1));
-  const key = new T.DirectionalLight(0xfff2db, 1.6);
+  const key = new T.DirectionalLight(0xfff2db, 2.3);
   key.position.set(-2, 5, 3);
   scene.add(key);
-  const rim = new T.DirectionalLight(0xe5ecff, 1.8);
+  const rim = new T.DirectionalLight(0xe5ecff, 3.2);
   rim.position.set(2, 2.2, -3); scene.add(rim);
   // A soft contact wash replaces the cut-out silhouette and expensive shadow passes.
   const shadowCanvas = document.createElement('canvas'); shadowCanvas.width = shadowCanvas.height = 128;
   const context = shadowCanvas.getContext('2d');
   const wash = context.createRadialGradient(64, 64, 2, 64, 64, 64);
-  wash.addColorStop(0, 'rgba(35,31,23,.25)'); wash.addColorStop(.45, 'rgba(35,31,23,.09)'); wash.addColorStop(1, 'rgba(35,31,23,0)');
+  wash.addColorStop(0, 'rgba(0,0,0,.7)'); wash.addColorStop(.45, 'rgba(0,0,0,.3)'); wash.addColorStop(1, 'rgba(0,0,0,0)');
   context.fillStyle = wash; context.fillRect(0, 0, 128, 128);
   const shadowTexture = new T.CanvasTexture(shadowCanvas);
   const ground = new T.Mesh(new T.PlaneGeometry(2.3, .85), new T.MeshBasicMaterial({ map: shadowTexture, transparent: true, depthWrite: false }));
@@ -151,6 +151,9 @@ try {
     model = gltf.scene;
     model.traverse((object) => { if (object.isMesh) { object.castShadow = true; object.receiveShadow = true; } });
     scene.add(model); bounds = new T.Box3().setFromObject(model); fit(true);
+    containOrbit();
+    // Reveal only after the fitted model has actually been drawn, not just parsed.
+    renderer.render(scene, camera);
     status.textContent = ''; canvas.dataset.state = 'ready'; notify('ready');
   }).catch(() => { if (!disposed) fail(); });
   window.addEventListener('pagehide', (event) => {
